@@ -7,7 +7,7 @@ Henson-MongoDB |build status|
 
 A library for using MongoDB with a Henson application.
 
-* `Documentation <https://henson-mongodb.rtfd.org>`_
-* `Installation <https://henson-mongodb.readthedocs.org/en/latest/#installation>`_
-* `Changelog <https://henson-mongodb.readthedocs.org/en/latest/changes.html>`_
+* `Documentation <https://henson-mongodb.readthedocs.io>`_
+* `Installation <https://henson-mongodb.readthedocs.io/en/latest/#installation>`_
+* `Changelog <https://henson-mongodb.readthedocs.io/en/latest/changes.html>`_
 * `Source <https://github.com/iheartradio/Henson-MongoDB>`_

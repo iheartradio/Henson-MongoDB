@@ -5,10 +5,7 @@ import pkg_resources
 import ssl
 
 from henson import Extension
-from motor.motor_asyncio import (
-    AsyncIOMotorClient,
-    AsyncIOMotorReplicaSetClient,
-)
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import uri_parser
 
 __all__ = ('MongoDB',)
@@ -74,22 +71,17 @@ class MongoDB(Extension):
         app.settings['MONGODB_CONNECT'] = info['options'].get(
             'auto_start_request', False)
 
-        # Replica sets require both a different client class and a
-        # different keyword argument name.
         if app.settings['MONGODB_REPLICA_SET']:
             kwargs['replicaSet'] = app.settings['MONGODB_REPLICA_SET']
-            _class = AsyncIOMotorReplicaSetClient
-        else:
-            _class = AsyncIOMotorClient
 
         host = app.settings['MONGODB_URI']
 
         kwargs['ssl'] = app.settings['MONGODB_USE_SSL']
 
         kwargs['document_class'] = app.settings['MONGODB_DOCUMENT_CLASS']
-        kwargs['max_pool_size'] = app.settings['MONGODB_MAX_POOL_SIZE']
+        kwargs['maxPoolSize'] = app.settings['MONGODB_MAX_POOL_SIZE']
         kwargs['tz_aware'] = app.settings['MONGODB_TIME_ZONE_AWARE']
-        kwargs['_connect'] = app.settings['MONGODB_CONNECT']
+        kwargs['connect'] = app.settings['MONGODB_CONNECT']
 
         self._auth = {
             'name': app.settings['MONGODB_USERNAME'],
@@ -121,7 +113,7 @@ class MongoDB(Extension):
                 'not at all.'
             )
 
-        self.client = _class(host, **kwargs)
+        self.client = AsyncIOMotorClient(host, **kwargs)
 
         # If a database name was provided, store the name so that the
         # db property can be used.

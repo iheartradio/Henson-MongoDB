@@ -1,6 +1,5 @@
 """Test the configuration settings."""
 
-from motor.motor_asyncio import AsyncIOMotorClient
 import pytest
 
 from henson_mongodb import MongoDB

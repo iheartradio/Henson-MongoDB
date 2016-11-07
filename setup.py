@@ -30,6 +30,7 @@ setup(
     py_modules='henson_mongodb',
     install_requires=[
         'Henson',
+        'lazy-object-proxy',
         'motor>=1,<2',
     ],
     tests_require=[

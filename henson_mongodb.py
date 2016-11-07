@@ -5,6 +5,7 @@ import pkg_resources
 import ssl
 
 from henson import Extension
+from lazy_object_proxy import Proxy
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import uri_parser
 
@@ -113,7 +114,12 @@ class MongoDB(Extension):
                 'not at all.'
             )
 
-        self.client = AsyncIOMotorClient(host, **kwargs)
+        # Motor calls get_event_loop when the client is created.
+        # Depending on how the application is run, this may be before
+        # Henson has had a chance to set the event loop. By postponing
+        # instantiation of the client until it's actually needed, Motor
+        # will get the correct loop.
+        self.client = Proxy(lambda: AsyncIOMotorClient(host, **kwargs))
 
         # If a database name was provided, store the name so that the
         # db property can be used.

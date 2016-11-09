@@ -5,6 +5,26 @@ import pytest
 from henson_mongodb import MongoDB
 
 
+def test_authentication_no_ssl_ca_certs_valueerror(test_app):
+    """Test that not providing ca certs raises ValueError."""
+    test_app.settings['MONGODB_URI'] = 'mongodb://testing@localhost/testing'
+    test_app.settings['MONGODB_AUTH_MECHANISM'] = 'MONGODB-X509'
+    test_app.settings['MONGODB_SSL_CERTFILE'] = 'ssl_certfile'
+
+    with pytest.raises(ValueError):
+        MongoDB(test_app)
+
+
+def test_authentication_no_ssl_certfile_valueerror(test_app):
+    """Test that not providing a certfile raises ValueError."""
+    test_app.settings['MONGODB_URI'] = 'mongodb://testing@localhost/testing'
+    test_app.settings['MONGODB_AUTH_MECHANISM'] = 'MONGODB-X509'
+    test_app.settings['MONGODB_SSL_CA_CERTS'] = 'ssl_sa_certs'
+
+    with pytest.raises(ValueError):
+        MongoDB(test_app)
+
+
 def test_database(test_app):
     """Test that the db attribute is enabled."""
     mongo = MongoDB(test_app)

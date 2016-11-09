@@ -43,9 +43,6 @@ class MongoDB(Extension):
         """
         super().init_app(app)
 
-        # Keyword arguments that will be passed to the MongoDB client.
-        kwargs = {}
-
         info = uri_parser.parse_uri(app.settings['MONGODB_URI'])
         if not info['database']:
             raise ValueError('A database name must be specified.')
@@ -71,17 +68,18 @@ class MongoDB(Extension):
         app.settings['MONGODB_CONNECT'] = info['options'].get(
             'auto_start_request', False)
 
+        # Keyword arguments that will be passed to the MongoDB client.
+        kwargs = {
+            'host': app.settings['MONGODB_URI'],
+            'ssl': app.settings['MONGODB_USE_SSL'],
+            'document_class': app.settings['MONGODB_DOCUMENT_CLASS'],
+            'maxPoolSize': app.settings['MONGODB_MAX_POOL_SIZE'],
+            'tz_aware': app.settings['MONGODB_TIME_ZONE_AWARE'],
+            'connect': app.settings['MONGODB_CONNECT'],
+        }
+
         if app.settings['MONGODB_REPLICA_SET']:
             kwargs['replicaSet'] = app.settings['MONGODB_REPLICA_SET']
-
-        host = app.settings['MONGODB_URI']
-
-        kwargs['ssl'] = app.settings['MONGODB_USE_SSL']
-
-        kwargs['document_class'] = app.settings['MONGODB_DOCUMENT_CLASS']
-        kwargs['maxPoolSize'] = app.settings['MONGODB_MAX_POOL_SIZE']
-        kwargs['tz_aware'] = app.settings['MONGODB_TIME_ZONE_AWARE']
-        kwargs['connect'] = app.settings['MONGODB_CONNECT']
 
         self._auth = {
             'name': app.settings['MONGODB_USERNAME'],
@@ -113,7 +111,7 @@ class MongoDB(Extension):
                 'not at all.'
             )
 
-        self.client = AsyncIOMotorClient(host, **kwargs)
+        self.client = AsyncIOMotorClient(**kwargs)
 
         # If a database name was provided, store the name so that the
         # db property can be used.

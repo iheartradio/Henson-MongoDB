@@ -26,3 +26,13 @@ def test_password_no_username_valueerror(test_app):
 
     with pytest.raises(ValueError):
         MongoDB(test_app)
+
+
+def test_replica_set(test_app):
+    """Test that replica sets get set correctly."""
+    test_app.settings['MONGODB_URI'] = (
+        'mongodb://testing:testing@localhost/testing?replicaSet=testing-rs'
+    )
+    mongo = MongoDB(test_app)
+
+    mongo.client.delegate._topology_settings._replica_set_name == 'testing-rs'

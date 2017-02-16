@@ -5,8 +5,7 @@ import pkg_resources
 import ssl
 
 from henson import Extension
-from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo import uri_parser
+from pymongo import MongoClient, uri_parser
 
 __all__ = ('MongoDB',)
 
@@ -111,7 +110,7 @@ class MongoDB(Extension):
                 'not at all.'
             )
 
-        self.client = AsyncIOMotorClient(**kwargs)
+        self.client = MongoClient(**kwargs)
 
         # If a database name was provided, store the name so that the
         # db property can be used.

@@ -7,6 +7,7 @@ from henson_mongodb import MongoDB
 
 def test_database(test_app):
     """Test that the db attribute is enabled."""
+    test_app.settings['MONGODB_URI'] = 'mongodb://testing:pw@localhost/testing'
     mongo = MongoDB(test_app)
 
     assert mongo.db
@@ -35,4 +36,4 @@ def test_replica_set(test_app):
     )
     mongo = MongoDB(test_app)
 
-    mongo.client.delegate._topology_settings._replica_set_name == 'testing-rs'
+    mongo.client.delegate['_topology_settings._replica_set_name'] == 'testing-rs'

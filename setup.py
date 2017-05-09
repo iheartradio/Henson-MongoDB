@@ -30,7 +30,7 @@ setup(
     py_modules='henson_mongodb',
     install_requires=[
         'Henson',
-        'motor>=1,<2',
+        'pymongo',
     ],
     tests_require=[
         'pytest',
